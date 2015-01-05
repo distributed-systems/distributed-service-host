@@ -59,7 +59,7 @@ the service host can either be started using the distributed cli orit can be inc
 
 
    -1. the discovery module gets loaded and instantiated
-	0. an application service is loaded and instantiatedm it registers itself at the discovery service
+	0. an application service is loaded and instantiated it registers itself at the discovery service
 	1. the application service requests a new service instance, bundles an unique token with the request
 	2. service gets installed 
 	3. service gets started
