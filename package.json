@@ -24,6 +24,7 @@
         , "semver"                  : "4.1.x"
         , "npm"                     : "2.1.x"
         , "node-uuid"               : "1.4.x"
+        , "test-config"             : "0.1.x"
     }
     , "devDependencies": {
           "mocha"                   : "1.17.x"

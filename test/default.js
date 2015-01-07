@@ -5,7 +5,8 @@
 		, path 			= require('path')
 		, crypto 		= require('crypto')
 		, assert 		= require('assert')
-		, uuid 			= require('node-uuid');
+		, uuid 			= require('node-uuid')
+		, Config 		= require('test-config');
 
 
 
@@ -17,6 +18,25 @@
 		, secret 				= crypto.randomBytes(32).toString('hex')
 		, app
 		, sh;
+
+
+
+
+	var config = new Config('config.js', {
+        db: [{
+              type       		 : 'postgres'
+            , database   		 : 'test'
+            , schema     		 : 'crud_service_test'
+            , hosts: [{
+                  host           : '127.0.0.1'
+                , username       : 'postgres'
+                , password       : ''
+                , port           : 5432
+                , mode           : 'readwrite'
+                , maxConnections : 500
+            }]
+        }]
+    });
 
 
 
@@ -67,7 +87,7 @@
 			this.timeout(10000);
 
 			// we need to create a token for the application service
-			sh.executeService('distributed-application', '*', secret, appId).then(function(serviceInstance) {
+			sh.executeService('distributed-application', '*', secret, appId, 'application').then(function(serviceInstance) {
 				assert(serviceInstance instanceof DistributedService);
 
 				app = serviceInstance;
@@ -80,9 +100,10 @@
 		it('Requesting a new relational CRUD Service instance', function(done) {
 			this.timeout(10000);
 
-			sh.executeService('distributed-relational-crud-service', '*', secret, appId).then(function(serviceInstance) {
-				log(serviceInstance);
-
+			app.executeService('distributed-relational-crud-service', '0.1.x', 'db', {
+				  db: config.db
+				, entites: ['event, venue, image']
+			}).then(function(serviceConfig) {
 				done();
 			}).catch(done);
 		});
